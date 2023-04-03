@@ -144,3 +144,60 @@ display(HBox([kpi1_dropdown, checkbox, kpi2_dropdown]))
 display(plot_dropdown)
 display(plot_button)
 display(VBox([plot_output, description_output]))
+
+
+
+
+
+
+
+
+
+
+import pandas as pd
+import plotly.express as px
+import ipywidgets as widgets
+from IPython.display import display
+
+# Load a sample dataset
+data = pd.read_csv('sample_data.csv')
+
+# Create a list of draggable widgets for each column
+column_widgets = [widgets.HTML(value=f'<h4>{col}</h4>', draggable=True) for col in data.columns]
+
+# Create a vertical box container for the column widgets
+column_container = widgets.VBox(column_widgets)
+
+# Create a plot output widget
+plot_output = widgets.Output()
+
+# Define a function to update the plot when the columns and date time axis are changed
+def update_plot(change):
+    with plot_output:
+        plot_output.clear_output()
+        fig = px.line(data, x='datetime', y=column_dropdown.value)
+        fig.update_layout(title=f'{column_dropdown.value} over Time')
+        fig.show()
+
+# Create a dropdown widget for selecting the column to plot
+column_dropdown = widgets.Dropdown(
+    options=list(data.columns),
+    description='Column:',
+    disabled=False
+)
+
+# Create a horizontal box container for the column dropdown and plot output
+control_container = widgets.HBox([column_dropdown, plot_output])
+
+# Link the column dropdown to the update function
+column_dropdown.observe(update_plot, names='value')
+
+# Add an event listener to the container to update the columns when they are moved
+def update_columns_order(change):
+    data.columns = [widget.value.split('<h4>')[1].split('</h4>')[0] for widget in column_container.children]
+    update_plot(None)
+    
+column_container.observe(update_columns_order, names='children')
+
+# Display the containers
+display(widgets.VBox([column_container, control_container]))
