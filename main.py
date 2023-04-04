@@ -201,3 +201,107 @@ column_container.observe(update_columns_order, names='children')
 
 # Display the containers
 display(widgets.VBox([column_container, control_container]))
+
+
+
+
+SQL function to delete fimport.
+
+
+LearnMeFree
+Assume that I have file table (file_id, file_type_id and fimport_id) and file_import with fimport_id. I would a SQL function f_file_import_delete(fimport) that remove a fimport_file with fimport_id. Check if exist a file import with fimport_id (using select count) before delete it and return bool as result 
+
+4 / 4
+
+
+Here is an example of a SQL function f_file_import_delete that will delete a record from the file_import table with the given fimport_id:
+
+sql
+Copy code
+CREATE FUNCTION f_file_import_delete(fimport INT) RETURNS BOOLEAN
+BEGIN
+  DECLARE count_imports INT;
+  SELECT COUNT(*) INTO count_imports FROM file_import WHERE fimport_id = fimport;
+
+  IF count_imports = 0 THEN
+    RETURN FALSE;
+  ELSE
+    DELETE FROM file_table WHERE fimport_id = fimport;
+    DELETE FROM file_import WHERE fimport_id = fimport;
+    RETURN TRUE;
+  END IF;
+END;
+Here's how it works:
+
+The function takes one parameter, fimport, which is the fimport_id of the file import to be deleted.
+The DECLARE statement defines a variable count_imports to hold the number of file imports with the given fimport_id.
+The SELECT COUNT(*) statement counts the number of file imports with the given fimport_id and stores the result in the count_imports variable.
+The IF count_imports = 0 statement checks if there are any file imports with the given fimport_id. If there are none, the function returns FALSE.
+If there are file imports with the given fimport_id, the function deletes all records with that fimport_id from both the file_table and file_import tables, and returns TRUE.
+
+
+
+LearnMeFree
+Datetime as parameter in SQL requete function 
+
+Yes, you can use DATETIME as a parameter in a SQL function. Here's an example of a function that takes a DATETIME parameter and returns the number of records in a table that have a timestamp greater than or equal to the input parameter:
+
+sql
+Copy code
+CREATE FUNCTION get_recent_records(date_param DATETIME) RETURNS INT
+BEGIN
+  DECLARE count INT;
+  SELECT COUNT(*) INTO count FROM my_table WHERE timestamp >= date_param;
+  RETURN count;
+END;
+In this example, the get_recent_records function takes a DATETIME parameter named date_param. It declares an integer variable count, which is used to store the result of the query that counts the number of records in my_table where the timestamp column is greater than or equal to date_param. Finally, the function returns the count variable.
+
+Note that the syntax for declaring and using parameters in SQL functions may vary depending on the specific database management system you're using.
+
+
+
+
+LearnMeFree
+Assume that I have a : 
+F_import table: f_import_id, start_date, end_date.
+File_type_def : file_type_id, file_type_name,file_type_desc
+File: file_id, file_type_id, file_name, file_size, fimport_id
+Equipment_files: equip_id, equip_sect_id, file_id 
+Equipment_sections: equip_id, equip_sect_id
+Equipment_section: equip_sect_id, equip_sect_name
+Equipment: equip_id, equip_name.
+
+I would create a function f_file_import_list_get that takes a date_from and date_to as parameters and return all imported files between those two dates. Return file_type_name, file_name, file_size, equip_name, equip_sect_name.
+I need a SQL function. First Check if already exists dates from f_import_file table between those dates. 
+
+3 / 3
+
+
+Here's an example of a SQL function f_file_import_list_get that takes date_from and date_to as parameters and returns the details of all imported files between those two dates. The function also checks if there are any imported files between those dates before returning the results:
+
+sql
+Copy code
+CREATE FUNCTION f_file_import_list_get(date_from DATETIME, date_to DATETIME) RETURNS TABLE (
+  file_type_name VARCHAR(255),
+  file_name VARCHAR(255),
+  file_size INT,
+  equip_name VARCHAR(255),
+  equip_sect_name VARCHAR(255)
+) 
+BEGIN
+  DECLARE count_imports INT;
+  SELECT COUNT(*) INTO count_imports FROM f_import WHERE start_date >= date_from AND end_date <= date_to;
+
+  IF count_imports = 0 THEN
+    RETURN NULL;
+  ELSE
+    RETURN SELECT ftd.file_type_name, f.file_name, f.file_size, e.equip_name, es.equip_sect_name
+      FROM f_import fi
+      JOIN file f ON fi.f_import_id = f.f_import_id
+      JOIN file_type_def ftd ON f.file_type_id = ftd.file_type_id
+      JOIN equipment_files ef ON f.file_id = ef.file_id
+      JOIN equipment_sections es ON ef.equip_sect_id = es.equip_sect_id
+      JOIN equipment e ON es.equip_id = e.equip_id
+      WHERE fi.start_date >= date_from AND fi.end_date <= date_to;
+  END IF;
+END;
