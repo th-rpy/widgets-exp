@@ -203,6 +203,31 @@ column_container.observe(update_columns_order, names='children')
 display(widgets.VBox([column_container, control_container]))
 
 
+from multiprocessing import Pool
+
+# Define the list of batches, their volumes, and the list of times
+batches = [...]  # list of batches
+volumes = [...]  # list of volumes of batches
+times = [...]  # list of times
+
+# Create a list of tuples
+batch_tuples = [(batch, volume, times) for batch, volume in zip(batches, volumes)]
+
+# Define the function to calculate the proportion of a batch at a specific time t
+def calculate_proportion(batch_tuple):
+    batch, volume, times = batch_tuple
+    proportions = [calculate_proportion_at_t(batch, time) for time in times]
+    return proportions
+
+# Define the number of processes to use
+num_processes = 4
+
+# Use multiprocessing and map to apply the function to each tuple in the list
+with Pool(num_processes) as p:
+    proportion_matrix = p.map(calculate_proportion, batch_tuples)
+
+# Convert the resulting list of tuples to a matrix
+proportion_matrix = np.array(proportion_matrix)
 
 
 
