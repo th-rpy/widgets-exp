@@ -231,3 +231,46 @@ proportion_matrix = np.array(proportion_matrix)
 
 
 
+-- Set the schema and table names
+SET search_path TO schema_name;
+SET table_name = 'your_table_name';
+
+-- Get the owner of the table
+SELECT tableowner FROM pg_tables WHERE schemaname = schema_name AND tablename = table_name;
+
+-- Get the privileges for the table
+SELECT grantee, privilege_type
+FROM information_schema.table_privileges
+WHERE table_schema = schema_name AND table_name = table_name;
+
+-- Get the DDL code for the table
+SELECT 
+    'CREATE TABLE ' || quote_ident(table_name) || '(' || chr(10) || 
+    array_to_string(array_agg(column_def ORDER BY ordinal_position), ',' || chr(10)) || 
+    chr(10) || ')' || 
+    CASE WHEN table_type = 'VIEW' THEN ' AS ' || view_definition ELSE '' END || ';' AS create_statement
+FROM (
+    SELECT 
+        c.column_name, 
+        c.column_default, 
+        c.is_nullable, 
+        CASE 
+            WHEN tc.constraint_type = 'PRIMARY KEY' THEN c.column_name || ' ' || 'SERIAL PRIMARY KEY'
+            WHEN c.udt_name IN ('varchar', 'text', 'char', 'bpchar') THEN c.column_name || ' ' || c.udt_name || '(' || coalesce(c.character_maximum_length::varchar, '') || ')'
+            WHEN c.udt_name IN ('numeric', 'decimal') THEN c.column_name || ' ' || c.udt_name || '(' || coalesce(c.numeric_precision::varchar, '') || ',' || coalesce(c.numeric_scale::varchar, '') || ')'
+            ELSE c.column_name || ' ' || c.udt_name
+        END AS column_def,
+        tc.constraint_type,
+        v.view_definition,
+        t.table_type,
+        c.ordinal_position
+    FROM 
+        information_schema.columns c 
+        JOIN information_schema.tables t ON t.table_schema = c.table_schema AND t.table_name = c.table_name
+        LEFT JOIN information_schema.key_column_usage kcu ON kcu.table_schema = c.table_schema AND kcu.table_name = c.table_name AND kcu.column_name = c.column_name
+        LEFT JOIN information_schema.table_constraints tc ON tc.constraint_schema = c.table_schema AND tc.table_name = c.table_name AND tc.constraint_name = kcu.constraint_name
+        LEFT JOIN information_schema.views v ON v.table_schema = c.table_schema AND v.table_name = c.table_name
+    WHERE 
+        c.table_schema = schema_name AND c.table_name = table_name
+) t
+GROUP BY table_name, view_definition, table_type;
