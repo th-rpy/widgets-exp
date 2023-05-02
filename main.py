@@ -1,3 +1,16 @@
+Kmsweb has recently implemented several improvements and updates to enhance their daily KPI tracking. 
+
+Firstly, they have added new KPIs per track including the daily average push rate and daily fill rate. 
+
+Secondly, they have improved the calculation process by utilizing another storage function to return bundle information such as package number, length, and volume. Additionally, a new cdk params file has been added to contain all cdk properties not already in the database. These changes have resulted in a significant reduction in code execution time from 6 seconds to less than 3.5 seconds per day. 
+
+Thirdly, adjustments have been made to the KPI functions to calculate KPIs on a daily basis and update abnormal data values. The new KPI values are now available in Kmsweb. 
+
+Fourthly, the code has been pushed to the web interface and server, taking into account the latest AP modifications in SQL functions for data import and management. Testing has been done in data import, but there are still some issues to be fixed in web server for data management. 
+
+Finally, the code has been cleaned up and reorganized, and is now stored in a repository called db_local. Implementation of additional requested modifications is also underway.
+
+
 import pandas as pd
 import plotly.express as px
 import ipywidgets as widgets
