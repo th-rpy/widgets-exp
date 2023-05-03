@@ -1,2 +1,1 @@
-An enhancement has been made to the database creation and configuration tool, whereby an automated data extraction feature has been added to generate SQL file format from pre-defined tables in the db_config, which can then be utilized to populate the respective tables. The newly introduced functionality has been thoroughly tested and validated, and subsequently, the updated codebase has been pushed to the production environment.
-Following a productive meeting with the FPI teams, all CDK signals have been successfully renamed, and a thorough verification of the calculation for both dry and wet bulb set point temperatures has been performed. The updated codebase has been meticulously tested and validated, and has subsequently been deployed to the production environment
+
