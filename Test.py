@@ -1,1 +1,5 @@
-
+- Completed the configuration of all alerts, some of which require being separated into distinct alerts related to valve operations.
+- Commenced the inclusion of English text for alerts pertaining to conventional kilns. For the CDK, an email will be sent to Kildare requesting the English version of the alerts.
+- Initiated the implementation of AL's suggestion to include a parameter in the notification description. Whenever a parameter value is modified, it will be updated accordingly in the notification description.
+- Introduced time-based grouping positions in Kmsweb for track 6 and track 7. Explored two approaches: one based on KPIs (requiring modifications to certain function signatures in Kmsweb), and another based on raw signals (with no changes to function signatures, albeit potentially slower). Currently, the implementation follows the second approach to avoid altering function signatures.
+- Modified the names of signals in the time-based groups.
