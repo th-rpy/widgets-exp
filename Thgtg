@@ -1,0 +1,17 @@
+
+Following the latest meeting with FPI teams, Marc requested the correction of the end date for several Cdk bundles in track 6, as well as the addition of two new KPIs: push rate and temperature set point.
+
+*Action:
+Verify and correct the calculation of the end date for the bundles.
+
+*Action:
+Add the KPIs "average_push_rate" and "avg_temperature set point" for CDK.
+
+...............................
+
+- Complete the configuration of all alerts for CDK (French version): add alerts for all valves.
+- Add the English text for conventional lion alerts: the translation is incorrect for some alerts. I will contact Kildare regarding this matter.
+- Finish adding parameters in the titles and descriptions of the alerts.
+- Configure the two alerts "avg_push_rate" and "avg_stp_temp".
+- Write the code for these two KPIs and perform testing.
+- Configure the KPI "text_batch_nb" for CDK.
