@@ -1,7 +1,0 @@
-# 
-- Explored methods for extracting permission statements from PostgreSQL functions. Added Python code to extract the permission statements. Improved the code by including type hints in the functions to enhance readability.
-- Investigated the removal of pkg_nb and pack length from the list of CDK Key Performance Indicators (KPIs). Added a new KPI with a different index name. Tested the addition of the new KPIs: avg_push rate and avg_stp temp were successfully included and displayed in the kmsweb test bench.
-- Began configuring the new CDK KPIs after the meeting with the FPI team. Used the Samuel excel file to initiate the preparation of the required signals.
-
-
-
