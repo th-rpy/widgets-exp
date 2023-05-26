@@ -1,28 +1,13 @@
-# widgets-exp
-- +AL: Reviewed the Key Performance Indicators (KPIs) for water removal. Discovered that certain bundles contain an unusually high amount of water. Verified the calculations and identified that the issue originates from the packtallys data.
+# .
 
-- Upon examining the effecto data for the invalid bundles, found instances of duplicate packtallys data for a single bundle. Decided to compile a list of effecto IDs corresponding to the invalid packs.
+- 
 
-- Developed code to list out the effecto IDs of the invalid bundles and stored them in an Excel file.
++AL: A solution was found to update the dates for bundles in kmslive 1. The end and start dates were manually changed to random dates within the original range. This allowed for the subsequent update with the correct dates. After running the code to re-extract and update the dates, the changes were successfully applied to kmslive1. The next step is to update the dates on the production side.
 
-- Reviewed the average push rate KPI values and removed a filter from the push rate calculation. After eliminating the filter, encountered negative values. Upon analyzing the code, determined that these issues were related to the calculation of start dates and end dates.
+Following the correction of the dates, the calculation for the average push rate KPI was re-run, resulting in the removal of negative values.
 
-- Commenced improving the start and end date calculation by incorporating a function to determine the end date for bundles with invalid position data.
+An investigation was conducted to identify the cause of consistently lower fill rate values in the daily KPIs over the past few days. It was discovered that the volume, length, and package number KPIs had issues. After fixing the problems and re-running the code, the values were corrected and the updated code was pushed.
 
-- Tested the improvement by generating a CSV file. +AL validated the results, confirming their accuracy.
++AL: The list of invalid effecto IDs has been shared for the necessary fixes. The removal values for water have now been corrected.
 
-- Executed the code in a test bench to update the dates. Although the dates were correct, they were not updated in kmslive 1!
-
-- Implemented code for daily KPIs temperature grouping.
-
-- Developed code for alerts, specifically for codes 4011, 4021, and 4031.
-
-- Modified certain parameters in alert 3111 and made changes to the code of other alerts.
-
-- Generated a CSV file containing alerts and obtained numerous entries. To ensure accuracy, verification with +AL was necessary.
-
-- Resolved a bug in the SQL function importation for black box events.
-
-- Initiated the process of writing code to import all black box files.
-
-- Added the signal red ID to the sign name for displaying the complete signal name during data viewing. Pushed the code.
+Furthermore, a script was completed to import all black box events and the importation process was improved. As a result, all black box events are now successfully stored in the database
