@@ -1,3 +1,0 @@
-- Addressed minor issues and resolved bugs. Additionally, refactored the CDK events calculation functions for improved clarity and explicitness.
-- Implemented the "get raw signals for daily KPI" function to prevent redundant calculations, resulting in a significant reduction in code execution time. The average execution time decreased from 6 seconds to approximately 3 seconds.
-- Conducted thorough testing on the implemented changes, and they performed as intended.
