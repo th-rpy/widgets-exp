@@ -1,1 +1,5 @@
-
+- Added alerts 3151 and 6050 to the testing phase after adjusting the alerts code.
+- Merged the develop code into dev_cdk code, fixed all tests, and pushed the code.
+- Integrated the new function to get cdk params into dev alerts and updated the code with the new changes.
+- Deleted all cdk alerts in history and replaced them with new ones for 1050, 6030, 6040, 3151, 7020, and 7030 in the database.
+- Verified some alerts in kmsweb and found that all of them are corrected. Writing an email to Samuel and Marc to verify those alerts.
