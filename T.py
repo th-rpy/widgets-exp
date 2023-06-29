@@ -38,3 +38,26 @@ fig.update_layout(height=600, width=800, title_text='Binary Signal Grid')
 
 # Display the grid graph
 fig.show()
+
+
+
+           ,
+        html.Script(
+            """
+            document.getElementById('horizontal-line').addEventListener('drag', function(event) {
+                event.preventDefault();
+                var dragValue = event.clientY;
+                if (dragValue !== null) {
+                    var graph1 = document.getElementById('graph1');
+                    var graph2 = document.getElementById('graph2');
+                    var graph1Height = parseFloat(graph1.style.height) || 50;
+                    var graph2Height = parseFloat(graph2.style.height) || 50;
+                    var maxDrag = Math.min(graph1Height, 100 - graph2Height);
+                    var dragPercentage = dragValue / window.innerHeight;
+                    var dragAmount = dragPercentage * maxDrag * 2 - maxDrag;
+                    graph1.style.height = (graph1Height - dragAmount) + '%';
+                    graph2.style.height = (graph2Height + dragAmount) + '%';
+                }
+            });
+            """
+        )
