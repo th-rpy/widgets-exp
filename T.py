@@ -7,8 +7,8 @@ np.random.seed(0)
 signals = np.random.randint(0, 2, size=(100, 10))
 
 # Define the number of rows and columns for subplots
-num_rows = 5  # Number of rows of subplots
-num_cols = 2  # Number of columns of subplots
+num_rows = 10  # Number of rows of subplots
+num_cols = 1  # Number of columns of subplots
 
 # Create a list to store subplot figures
 subplot_figs = []
@@ -44,15 +44,15 @@ fig = make_subplots(rows=num_rows, cols=num_cols, subplot_titles=[f'Signal {i+1}
 
 # Assign each subplot figure to the corresponding subplot position and remove spacing
 for i in range(num_rows):
-    for j in range(num_cols):
-        fig.add_trace(subplot_figs[i * num_cols + j].data[0], row=i+1, col=j+1)
-        fig.update_layout(
-            {'xaxis' + str(i * num_cols + j + 1): {'anchor': 'y' + str(i * num_cols + j + 1)}},
-            {'yaxis' + str(i * num_cols + j + 1): {'anchor': 'x' + str(i * num_cols + j + 1)}}
-        )
+    fig.add_trace(subplot_figs[i].data[0], row=i+1, col=1)
+    fig.update_layout(
+        {'xaxis' + str(i + 1): {'anchor': 'y' + str(i + 1)}},
+        {'yaxis' + str(i + 1): {'anchor': 'x' + str(i + 1)}},
+        {'xaxis' + str(i + 1): {'domain': [0, 1]}}
+    )
 
 # Update the merged plot layout
-fig.update_layout(height=600, width=800, title_text='Binary Signal Plots', showlegend=False)
+fig.update_layout(height=800, width=600, title_text='Binary Signal Plots', showlegend=False)
 
 # Display the merged plot
 fig.show()
