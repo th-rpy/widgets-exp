@@ -148,24 +148,53 @@ fig.update_layout(height=600, width=800, title_text='Binary Signal Grid')
 fig.show()
 
 
+// dragHandler function
+function dragHandler(dragValue, existingData) {
+  const newDragValue = parseFloat(dragValue);
+  const newData = Object.assign({}, existingData);
+  newData.dragValue = newDragValue;
+  return newData;
+}
 
-           ,
-        html.Script(
-            """
-            document.getElementById('horizontal-line').addEventListener('drag', function(event) {
-                event.preventDefault();
-                var dragValue = event.clientY;
-                if (dragValue !== null) {
-                    var graph1 = document.getElementById('graph1');
-                    var graph2 = document.getElementById('graph2');
-                    var graph1Height = parseFloat(graph1.style.height) || 50;
-                    var graph2Height = parseFloat(graph2.style.height) || 50;
-                    var maxDrag = Math.min(graph1Height, 100 - graph2Height);
-                    var dragPercentage = dragValue / window.innerHeight;
-                    var dragAmount = dragPercentage * maxDrag * 2 - maxDrag;
-                    graph1.style.height = (graph1Height - dragAmount) + '%';
-                    graph2.style.height = (graph2Height + dragAmount) + '%';
-                }
-            });
-            """
-        )
+// updateGraphHeight function
+function updateGraphHeight(data, graph1Style, graph2Style) {
+  if (!data || !data.dragValue) {
+    return [graph1Style, graph2Style];
+  }
+
+  const dragValue = parseInt(data.dragValue);
+  const graph1Height = parseInt(graph1Style.height.replace('%', ''));
+  const graph2Height = parseInt(graph2Style.height.replace('%', ''));
+  const maxHeight = 100;
+
+  if (dragValue < 0 && graph1Height > 0) {
+    graph1Style.height = `${graph1Height - Math.abs(dragValue)}%`;
+    graph2Style.height = `${graph2Height + Math.abs(dragValue)}%`;
+  } else if (dragValue > 0 && graph2Height > 0) {
+    graph1Style.height = `${graph1Height + Math.abs(dragValue)}%`;
+    graph2Style.height = `${graph2Height - Math.abs(dragValue)}%`;
+  }
+
+  return [graph1Style, graph2Style];
+}
+
+
+      app.clientside_callback(
+    ClientsideFunction(
+        namespace='clientside',
+        function_name='dragHandler'
+    ),
+    Output('drag-store', 'data'),
+    [Input('drag-value', 'value')],
+    [State('drag-store', 'data')]
+)
+
+app.clientside_callback(
+    ClientsideFunction(
+        namespace='clientside',
+        function_name='updateGraphHeight'
+    ),
+    [Output('graph1', 'style'), Output('graph2', 'style')],
+    [Input('drag-store', 'data')],
+    [State('graph1', 'style'), State('graph2', 'style')]
+)
