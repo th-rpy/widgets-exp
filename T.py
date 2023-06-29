@@ -198,3 +198,40 @@ app.clientside_callback(
     [Input('drag-store', 'data')],
     [State('graph1', 'style'), State('graph2', 'style')]
 )
+
+
+
+,
+        html.Script(
+            """
+            document.addEventListener("DOMContentLoaded", function() {
+                var line = document.getElementById("horizontal-line");
+                var graph1 = document.getElementById("graph1");
+                var graph2 = document.getElementById("graph2");
+                var initialY = 0;
+                var initialHeight = 0;
+
+                line.addEventListener("mousedown", function(e) {
+                    initialY = e.clientY;
+                    initialHeight = parseFloat(graph1.style.height);
+                    document.addEventListener("mousemove", resizeGraphs);
+                    document.addEventListener("mouseup", removeEventListeners);
+                });
+
+                function resizeGraphs(e) {
+                    var deltaY = e.clientY - initialY;
+                    var newHeight = initialHeight + (deltaY / window.innerHeight) * 100;
+                    var graph1Height = Math.max(Math.min(newHeight, 100), 0) + "%";
+                    var graph2Height = Math.max(100 - newHeight, 0) + "%";
+
+                    graph1.style.height = graph1Height;
+                    graph2.style.height = graph2Height;
+                }
+
+                function removeEventListeners() {
+                    document.removeEventListener("mousemove", resizeGraphs);
+                    document.removeEventListener("mouseup", removeEventListeners);
+                }
+            });
+            """
+        ),
