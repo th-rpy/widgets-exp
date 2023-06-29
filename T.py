@@ -26,6 +26,114 @@ for i in range(signals.shape[1]):
         name=f'Signal {i+1}'
     )
 
+
+
+import dash
+import dash_core_components as dcc
+import dash_html_components as html
+from dash.dependencies import Input, Output, State
+
+app = dash.Dash(__name__)
+
+app.layout = html.Div(
+    [
+        dcc.Graph(
+            id='graph1',
+            figure={
+                'data': [{'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'Graph 1'}],
+                'layout': {'title': 'Graph 1'}
+            },
+            style={'height': '50%'}
+        ),
+        html.Hr(),
+        dcc.Graph(
+            id='graph2',
+            figure={
+                'data': [{'x': [1, 2, 3], 'y': [2, 4, 1], 'type': 'bar', 'name': 'Graph 2'}],
+                'layout': {'title': 'Graph 2'}
+            },
+            style={'height': '50%'}
+        ),
+        html.Div(
+            id='horizontal-line',
+            style={
+                'width': '100%',
+                'height': '2px',
+                'background-color': 'black',
+                'position': 'relative',
+                'top': '50%',
+                'transform': 'translateY(-50%)'
+            },
+            draggable=True
+        ),
+        dcc.Input(id='drag-value', type='hidden')
+    ],
+    id='main-container'
+)
+
+app.scripts.append_script(
+    """
+    document.addEventListener('DOMContentLoaded', function() {
+        var dragValue = 0;
+        var dragStartY = 0;
+        var line = document.getElementById('horizontal-line');
+        var input = document.getElementById('drag-value');
+        var container = document.getElementById('main-container');
+
+        line.addEventListener('dragstart', function(e) {
+            dragStartY = e.clientY;
+        });
+
+        container.addEventListener('dragover', function(e) {
+            e.preventDefault();
+        });
+
+        container.addEventListener('dragenter', function(e) {
+            e.preventDefault();
+        });
+
+        container.addEventListener('drop', function(e) {
+            var dragEndY = e.clientY;
+            dragValue = dragEndY - dragStartY;
+            input.value = dragValue;
+            input.dispatchEvent(new Event('change'));
+        });
+    });
+    """
+)
+
+@app.callback(
+    Output('graph1', 'style'),
+    Output('graph2', 'style'),
+    Input('drag-value', 'value'),
+    State('graph1', 'style'),
+    State('graph2', 'style')
+)
+def update_graph_height(drag_value, graph1_style, graph2_style):
+    if drag_value is None:
+        return graph1_style, graph2_style
+
+    drag_value = int(drag_value)
+    graph1_height = int(graph1_style['height'].strip('%'))
+    graph2_height = int(graph2_style['height'].strip('%'))
+    max_height = 100
+
+    if drag_value < 0 and graph1_height > 0:
+        graph1_height -= abs(drag_value)
+        graph2_height += abs(drag_value)
+    elif drag_value > 0 and graph2_height > 0:
+        graph1_height += abs(drag_value)
+        graph2_height -= abs(drag_value)
+
+    graph1_style['height'] = f'{graph1_height}%'
+    graph2_style['height'] = f'{graph2_height}%'
+
+    return graph1_style, graph2_style
+
+if __name__ == '__main__':
+    app.run_server(debug=True)
+
+
     # Add the scatter trace to the subplot
     fig.add_trace(scatter_trace, row=row, col=col)
 
