@@ -32,9 +32,12 @@ for i in range(signals.shape[1]):
     fig.update_layout(
         title=f'Signal {i+1}',
         xaxis=dict(title='Time'),
-        yaxis=dict(title='Value'),
+        yaxis=dict(title=''),
         showlegend=True
     )
+
+    # Remove y-axis tick values
+    fig.update_yaxes(tickvals=[])
 
     # Append the subplot figure to the list
     subplot_figs.append(fig)
@@ -47,9 +50,14 @@ for i in range(num_rows):
     fig.add_trace(subplot_figs[i].data[0], row=i+1, col=1)
     fig.update_layout(
         {'xaxis' + str(i + 1): {'anchor': 'y' + str(i + 1)}},
-        {'yaxis' + str(i + 1): {'anchor': 'x' + str(i + 1)}},
-        {'xaxis' + str(i + 1): {'domain': [0, 1]}}
+        {'yaxis' + str(i + 1): {'anchor': 'x' + str(i + 1)}}
     )
+
+    # Remove vertical spacing between subplots
+    if i > 0:
+        fig.update_layout(
+            {'yaxis' + str(i + 1): {'overlaying': 'y' + str(i)}}
+        )
 
 # Update the merged plot layout
 fig.update_layout(height=800, width=600, title_text='Binary Signal Plots', showlegend=False)
