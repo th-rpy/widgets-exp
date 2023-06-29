@@ -1,66 +1,40 @@
 import plotly.graph_objects as go
-from plotly.subplots import make_subplots
 import numpy as np
 
 # Create random binary signals for demonstration
 np.random.seed(0)
 signals = np.random.randint(0, 2, size=(100, 10))
 
-# Define the number of rows and columns for subplots
-num_rows = 10  # Number of rows of subplots
-num_cols = 1  # Number of columns of subplots
+# Define the number of rows and columns for the grid
+num_rows = 5  # Number of rows in the grid
+num_cols = 2  # Number of columns in the grid
 
-# Create a list to store subplot figures
-subplot_figs = []
-
-# Iterate over the signals and create subplots
-for i in range(signals.shape[1]):
-    # Create a new subplot figure
-    fig = go.Figure()
-
-    # Add a scatter trace for the current signal
-    fig.add_trace(
-        go.Scatter(
-            x=np.arange(signals.shape[0]),
-            y=signals[:, i],
-            mode='markers',
-            name=f'Signal {i+1}'
-        )
-    )
-
-    # Set the subplot layout
-    fig.update_layout(
-        title=f'Signal {i+1}',
-        xaxis=dict(title='Time'),
-        yaxis=dict(title=''),
-        showlegend=True
-    )
-
-    # Remove y-axis tick values
-    fig.update_yaxes(tickvals=[])
-
-    # Append the subplot figure to the list
-    subplot_figs.append(fig)
-
-# Create the merged plot
+# Create a figure with subplots
 fig = make_subplots(rows=num_rows, cols=num_cols, subplot_titles=[f'Signal {i+1}' for i in range(signals.shape[1])])
 
-# Assign each subplot figure to the corresponding subplot position and remove spacing
-for i in range(num_rows):
-    fig.add_trace(subplot_figs[i].data[0], row=i+1, col=1)
-    fig.update_layout(
-        {'xaxis' + str(i + 1): {'anchor': 'y' + str(i + 1)}},
-        {'yaxis' + str(i + 1): {'anchor': 'x' + str(i + 1)}}
+# Iterate over the signals and add binary plots to the subplots
+for i in range(signals.shape[1]):
+    # Calculate the row and column index of the current subplot
+    row = (i // num_cols) + 1
+    col = (i % num_cols) + 1
+
+    # Create a scatter trace for the binary signal
+    scatter_trace = go.Scatter(
+        x=np.arange(signals.shape[0]),
+        y=signals[:, i],
+        mode='markers',
+        name=f'Signal {i+1}'
     )
 
-    # Remove vertical spacing between subplots
-    if i > 0:
-        fig.update_layout(
-            {'yaxis' + str(i + 1): {'overlaying': 'y' + str(i)}}
-        )
+    # Add the scatter trace to the subplot
+    fig.add_trace(scatter_trace, row=row, col=col)
 
-# Update the merged plot layout
-fig.update_layout(height=800, width=600, title_text='Binary Signal Plots', showlegend=False)
+    # Update the layout of the subplot
+    fig.update_xaxes(title='Time', row=row, col=col)
+    fig.update_yaxes(title='', tickvals=[0, 1], ticktext=['0', '1'], row=row, col=col)
 
-# Display the merged plot
+# Update the layout of the grid
+fig.update_layout(height=600, width=800, title_text='Binary Signal Grid')
+
+# Display the grid graph
 fig.show()
