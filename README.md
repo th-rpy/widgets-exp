@@ -1,1 +1,12 @@
-
+Here's an improved version of the text:
+- Continued to investigate why the load of signals in kmsweb CDs is so slow
+- Kmsweb: Added a graph for digital signals by incorporating subplots to create a figure similar to Dasui. Separated the two graphs (analog and digital) with a horizontal line. Implemented necessary callbacks to handle the new groups of digital signals.
+- Enhanced the appearance of the figures by applying CSS styling to make them more elegant and distinct.
+- Researched how to add JavaScript code to resize the two figures. Ultimately, a JS code was added to the common_callback JS file to adjust the heights of the figures when the horizontal line separating them is moved up or down.
+- Thoroughly tested the JS code, resolving various issues and bugs. The final layout now closely resembles DAsUi.
+- Began the process of cleaning up the code in kmsweb CDK to prepare for pushing it.
+- AL: To test the digital signals, we need to switch to datasrv that works with kmlive 2. Currently, it is not functioning, and an error message indicates the absence of digital signals.
+- AL: Need to investigate the presence of NaNs in drying time KPI (batch and phase 2) for certain CDK batches. After debugging the code, I discovered an issue with the duration calculations for phases. In batches where missing values were observed, the start and end dates were correctly detected, but the duration was inaccurately calculated. Adjustments to the code for duration calculation are necessary.
+- Recalculated the duration of phases and refactored the code for extracting dates for CDK batches. The updated code has been pushed.
+- After implementing these changes and running the analysis, the problem was resolved, and the missing values are now included in kmsweb (prod and kmlive5). Merging it into the master branch is the next step.
+- Implemented additional security measures in KPI calculation. For heating rate calculation, a condition was added to prevent division by zero warnings.
