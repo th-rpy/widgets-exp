@@ -1,3 +1,29 @@
+
+import numpy as np
+import datetime as dt
+
+def find_end_date(locations_sig, end_pos, kiln_end_pos, tolerance_range_of_end_time, times):
+    # Find the index of the closest end position
+    end_index = np.argmax(locations_sig == end_pos)
+
+    # Check if the closest end position is within the tolerance range
+    if abs(end_pos - kiln_end_pos) <= tolerance_range_of_end_time:
+        # If within tolerance, assign the corresponding time as the end date
+        end_date = times[end_index].astype(dt.datetime)
+    else:
+        # If outside tolerance range
+        if end_pos < kiln_end_pos:
+            # If the closest end position is smaller than 290, assign the corresponding time as the end date
+            end_date = times[end_index].astype(dt.datetime)
+        else:
+            # Look for the closest end position that is smaller than 290
+            new_end_index = np.argmax(locations_sig < kiln_end_pos)
+            # Assign the corresponding time as the end date
+            end_date = times[new_end_index].astype(dt.datetime)
+
+    return end_date
+
+
 import plotly.graph_objects as go
 import numpy as np
 
