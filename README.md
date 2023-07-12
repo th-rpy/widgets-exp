@@ -1,8 +1,6 @@
-# widgets-exp
-- Reviewed the latest changes in CDK functions and made improvements. Added CDK parameters to the function that defines the package number for a CDK bundle. Updated the code to be more generic, enabling easier adaptation in other projects.
-- Tested the new changes thoroughly and implemented them in the test functions. Pushed the updated code to the repository.
-- Started merging the develop branch into the dev CDK branch. Ensured file-by-file verification to ensure that the dev CDK code matches the one in the develop branch.
-- For the kmsweb CDK, added CDK parameters to the function and made necessary adaptations to the existing code. Merged the kmsweb branch into the kmsweb CDK branch and pushed the changes.
-- Completed the Canfor project by writing a comprehensive script that retrieves start date, end date, and Mc values from a text file. Created multiple tests to validate all the functions used, and all tests passed successfully.
-- Organized the code and pushed it to the Kmsweb_wellisons repository.
-- Discussed the next steps with +AL: planning to write and configure Mc signals in the local database.
+- Completed the necessary adjustments to the CDK code, incorporating CDK parameters. Additionally, implemented a logger within the get CDK params function.
+- Modified the function signature of get CDK params to accept only the equipment ID. These changes have been implemented in the kmsweb CDK code.
+- Integrated the development alerts code into the development CDK.
+- Successfully pushed the code to the kmsweb CDK. The AD (pull request) was merged into the kmsweb test bench, and everything is functioning correctly in the test environment.
+- Started the code review process for the kms_mec module in the Canfor project. Made necessary adjustments to the setup signals function to align with the Canfor project requirements. Tested these modifications in the local database and addressed several issues and bugs that were identified.
+- Developed a new function to read all files and extract the Mc values from each file. Prepared a function to store these values in a table.
