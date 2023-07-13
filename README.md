@@ -1,6 +1,7 @@
-- Completed the necessary adjustments to the CDK code, incorporating CDK parameters. Additionally, implemented a logger within the get CDK params function.
-- Modified the function signature of get CDK params to accept only the equipment ID. These changes have been implemented in the kmsweb CDK code.
-- Integrated the development alerts code into the development CDK.
-- Successfully pushed the code to the kmsweb CDK. The AD (pull request) was merged into the kmsweb test bench, and everything is functioning correctly in the test environment.
-- Started the code review process for the kms_mec module in the Canfor project. Made necessary adjustments to the setup signals function to align with the Canfor project requirements. Tested these modifications in the local database and addressed several issues and bugs that were identified.
-- Developed a new function to read all files and extract the Mc values from each file. Prepared a function to store these values in a table.
+
+- Canfor Project: Developed a function to write tag data frames into the database and thoroughly tested it. The function performed successfully by effectively adding Mc values to the database.
+- Restructured the read data functions by converting all the functions into a Python class. This modification enhanced code readability and robustness.
+- Enhanced the file data result by incorporating a kiln number. Extracted the kiln number from the text file using the "Sch Number" label.
+- Began adjusting the tests after implementing the aforementioned changes and introduced a new test as well.
+- Incorporated a tag config file (Python file) to centralize all the necessary configurations required to run the code. This file now includes the path to the data folder, a list of equipment, signal names (both digital and analog), and tag configurations for analog signals (Mc signals).
+- Modified the code to utilize this tag config file instead of passing the configurations as arguments. This approach enhances modularity and simplifies the code structure.
